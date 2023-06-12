@@ -10,64 +10,6 @@ st.set_page_config(
     layout = 'wide'
     )
 
-# Data Preparation
-tax_revenue_df = pd.read_csv("Data/Tax Revenue Data.csv") # dari OECD
-cpi_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\CPI Data\CPI Data.csv") # dari transparency international 
-population_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\Population Data\Population Data.csv") # dari world bank
-gdp_per_capita_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\GDP per Capita\GDP per Capita.csv") # dari world bank
-inflation_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\Inflation Rate\Inflation Rate.csv") # dari world bank
-unemployment_df = pd.read_csv("D:/Latihan Coding/TETRIS CEO BATCH 3/CAPSTONE PROJECT/Data/Unemployment Rate/Unemployment Rate.csv") # dari world bank
-populationgrowth_df = pd.read_csv("D:/Latihan Coding/TETRIS CEO BATCH 3/CAPSTONE PROJECT/Data/Population Growth/Population Growth.csv") # dari world bank
-fdi_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\FDI Data\FDI Data.csv") # dari world bank
-labour_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\Labour Force Data\Labour Force.csv") # dari world bank
-
-# Data Cleaning and Preprocessing
-year_list = [x for x in range(2011,2021)]
-str_year_list = [str(year) for year in range(2011, 2021)]
-column_list = ['COU','Tax revenue','Year','Value']
-clean_tax_revenue_df = tax_revenue_df[(tax_revenue_df['Indicator'] == "Tax revenue as % of GDP") & (tax_revenue_df['Tax revenue'] == '1000 Taxes on income, profits and capital gains') & (tax_revenue_df['Level of government'] == 'Total') & (tax_revenue_df['Year'].isin(year_list))][column_list]
-clean_tax_revenue_df = clean_tax_revenue_df.rename(columns= {'COU':'Country Code'})
-column_list = ['Year', 'Country', 'ISO3', 'CPI Score', 'Region']
-clean_cpi_df = cpi_df[cpi_df.Year != 2010][column_list]
-clean_cpi_df = clean_cpi_df.rename(columns = {'ISO3':'Country Code'})
-clean_population_df = population_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_population_df = pd.melt(clean_population_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Population'})
-clean_population_df['Year'] = clean_population_df['Year'].astype(int)
-clean_gdp_per_capita_df = gdp_per_capita_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_gdp_per_capita_df = pd.melt(clean_gdp_per_capita_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'GDP per Capita'})
-clean_gdp_per_capita_df['Year'] = clean_gdp_per_capita_df['Year'].astype(int)
-clean_inflation_df = inflation_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_inflation_df = pd.melt(clean_inflation_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Inflation Rate'})
-clean_inflation_df['Year'] = clean_inflation_df['Year'].astype(int)
-clean_unemployment_df = unemployment_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_unemployment_df = pd.melt(clean_unemployment_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Unemployment Rate'})
-clean_unemployment_df['Year'] = clean_unemployment_df['Year'].astype(int)
-clean_populationgrowth_df = populationgrowth_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_populationgrowth_df = pd.melt(clean_populationgrowth_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Population Growth'})
-clean_populationgrowth_df['Year'] = clean_populationgrowth_df['Year'].astype(int)
-clean_fdi_df = fdi_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_fdi_df = pd.melt(clean_fdi_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Foreign Direct Investment'})
-clean_fdi_df['Year'] = clean_fdi_df['Year'].astype(int)
-clean_labour_df = labour_df[['Country Code'] + ['Country Name'] + str_year_list]
-clean_labour_df = pd.melt(clean_labour_df, id_vars=['Country Name','Country Code'], value_vars=str_year_list).rename(columns = {'Country Name':'Country','variable':'Year', 'value':'Labour Force'})
-clean_labour_df['Year'] = clean_labour_df['Year'].astype(int)
-merge_df = pd.merge(clean_tax_revenue_df, clean_population_df, how='left', left_on=['Country Code','Year'], right_on = ['Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_cpi_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_gdp_per_capita_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_inflation_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_populationgrowth_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_fdi_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_unemployment_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df = pd.merge(merge_df, clean_labour_df, how='left', left_on=['Country','Country Code','Year'], right_on = ['Country','Country Code','Year'])
-merge_df['Labour Force Rate'] = merge_df['Labour Force']/merge_df['Population']
-merge_df = merge_df.rename(columns={'Value':'% Tax Revenue per GDP'})
-merge_df = merge_df[['Country Code','Country','Region','Year','Tax revenue','% Tax Revenue per GDP','CPI Score','GDP per Capita','Inflation Rate','Foreign Direct Investment','Population Growth','Unemployment Rate','Population','Labour Force Rate']]
-merge_df = merge_df.dropna()
-parameter_list = ['% Tax Revenue per GDP','CPI Score','GDP per Capita','Inflation Rate','Population Growth','Unemployment Rate','Labour Force Rate']
-for i in parameter_list:
-    merge_df = merge_df[merge_df[i] != 0]
-tax_df = merge_df.drop(['Population','Foreign Direct Investment'], axis = 1)
-
 # Streamlit
 st.markdown("<h1 style='text-align: center; margin-top: 0px'>Indonesia's Income and Capital Gain Tax Policy Performance Analysis over 10 Years from 2011 to 2020</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; line-height: 0.5;'>Author : Jevis Xandra</h4>", unsafe_allow_html=True)
@@ -144,8 +86,6 @@ with pocol2:
     st.markdown("<p style='text-align: justify; font-size: 18px;'>" + potext_1 + potext_2 + potext_3 + potext_4 + potext_5 + "</h3>",
                 unsafe_allow_html=True)
 
-
-
 porev_1 = "Based on the news from Indonesia above, Minister of Finance Sri Mulyani Indrawati stated that the low tax ratio in Indonesia is caused by the low compliance rate of the society in paying taxes, and some people still perceive tax payment as a form of colonization."
 porev_2 = " The question is are these the only causes? Has the tax regulation been perfectly assessed to adapt to the country's conditions so that people do not hesitate to paying taxes?"
 porev_3 = " In this project, we will explore all the facts to answer these questions."
@@ -186,10 +126,6 @@ with step3_sub:
     st.markdown("<p style='text-align: justify; font-size: 16px;'>" + step3_text1 + step3_text2 + step3_text3 + "</h3>",
     unsafe_allow_html=True)
 
-
-
-
-
 step4, step5, step6 = st.columns(3)
 with step4:
     st.markdown("<h3 style='text-align: center;'>Step 4 : Data Visualization </h3>",
@@ -213,8 +149,6 @@ with step6:
     step6_text2 = "<br>1. Evaluating the performance of the machine learning model using the test dataset and the Mean Absolute Error metric.<br>2. Building the final machine learning model using data/parameters from all countries except Indonesia.<br>3. Comparing the predicted tax realizations from the machine learning model with the actual conditions over a 10-year period.<br>4. Calculating the performance index over the 10-year period and visualizing it in the form of a graph."
     st.markdown("<p style='text-align: justify; font-size: 16px;'>" + step6_text1 + step6_text2 + "</h3>",
     unsafe_allow_html=True)
-
-
 
 st.markdown("<h2 style='text-align: left;'>Income and Capital Gain Tax Factor Dashboard from Tableau</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: justify; font-size: 16px;'><i>This is an interactive dashboard, so feel free to explore</i></p>",
@@ -243,6 +177,7 @@ vizElement.parentNode.insertBefore(scriptElement, vizElement);
 
 st.markdown("<h2 style='text-align: left;'>What have we known so far?</h2>", unsafe_allow_html=True)
 
+tax_df = pd.read_csv("Data/Tax Analysis.csv")
 year_list = [x for x in range(2011,2021)]
 indo_pred = []
 for i in year_list:
