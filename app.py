@@ -83,7 +83,7 @@ po2.markdown("<h2 style=''>" + "Project Introduction"  + "</h2>",
 
 pocol1, pocol2, pocol3, pocol4 = st.columns([1,4,9,1])
 with pocol2:
-    image_1 = Image.open("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Image\Berita_1.jpg")
+    image_1 = Image.open("Imaage/Berita_1.jpg")
     st.image(image_1, caption='Sumber : Pajakku.com', use_column_width=True)
 with pocol3:
     potext_1 = " Menteri Keuangan Sri Mulyani Indrawati mengatakan rasio pajak Indonesia rendah. Penyebab rendahnya rasio pajak Indonesia dikarenakan tingkat kepatuhan masyarakat membayar pajak masih rendah. Tidak hanya itu, sebagian masyarakat yang masih menganggap membayar pajak merupakan bentuk penjajahan dan bukan suatu kewajiban."
