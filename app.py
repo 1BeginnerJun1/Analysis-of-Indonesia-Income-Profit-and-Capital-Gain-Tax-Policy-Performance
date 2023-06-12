@@ -121,8 +121,8 @@ with step2_sub:
     unsafe_allow_html=True)
 with step3_sub:
     step3_text1 = "After going through the data exploration phase, we now have an understanding of the data contents. In this phase, the previously separate data will be combined into a single table, keeping the desired columns or parameters and removing unwanted parameters. Several steps are taken in this phase: "
-    step3_text2 = "<br>1. Rearranging the table format for each dataset to make them compatible for merging.<br>2. Adjusting the data types of the tables if needed.<br>3. Combining all the data into a single table with the desired parameters.<br>4. Removing rows containing null values.<br>5. Removing rows with a value of 0 in the % Tax Revenue per GDP variable.<br>6. Checking the correlation between variables.<br>7. Discarding parameters/variables with low correlation to the target variable."
-    step3_text3 = "Once all these steps are completed, the data is ready to be used for building a machine learning model."
+    step3_text2 = "<br>1. Rearranging the table format for each dataset to make them compatible for merging.<br>2. Adjusting the data types of the tables if needed.<br>3. Combining all the data into a single table with the desired parameters.<br>4. Removing rows containing null values.<br>5. Removing rows with a value of 0 in the % Tax Revenue per GDP variable.<br>6. Checking the correlation between variables.<br>7. Discarding parameters/variables with low correlation to the target variable (Population and Foreign Direct Investment)."
+    step3_text3 = "<br>Once all these steps are completed, the data is ready to be used for building a machine learning model."
     st.markdown("<p style='text-align: justify; font-size: 16px;'>" + step3_text1 + step3_text2 + step3_text3 + "</h3>",
     unsafe_allow_html=True)
 
@@ -206,7 +206,7 @@ with vis10:
 vis11, vis12 = st.columns([6,4])
 with vis11:
     vis11_text1 = "From the heatmap chart attached on the right side, we can observe the correlation of Tax Revenue per GDP (%) to other parameters. Based on the chart, we can draw the following conclusions:"
-    vis11_text2 = "<br>1. CPI Score and GDP per Capita have a strong positive correlation with income and capital gain tax revenue per GDP.<br>2. Labour Force Rate has a moderate positive correlation with income and capital gain tax revenue per GDP.<br>3. Unemployment Rate has a weak positive correlation with income and capital gain tax revenue per GDP.<br>4. Inflation Rate and Population Growth have a weak negative correlation with income and capital gain tax revenue per GDP.<br>5. Population and Foreign Direct Investment have no correlation with income and capital gain tax revenue per GDP."
+    vis11_text2 = "<br>1. CPI Score and GDP per Capita have a strong positive correlation with income and capital gain tax revenue per GDP.<br>2. Labour Force Rate has a moderate positive correlation with income and capital gain tax revenue per GDP.<br>3. Unemployment Rate has a weak positive correlation with income and capital gain tax revenue per GDP.<br>4. Inflation Rate and Population Growth have a weak negative correlation with income and capital gain tax revenue per GDP.<br>5. Population and Foreign Direct Investment have no correlation with income and capital gain tax revenue per GDP (Already discarded in data preprocessing step)."
     st.markdown("<p style='text-align: justify; font-size: 20px;'>" + vis11_text1 + vis11_text2 + "</h3>",
     unsafe_allow_html=True)
 with vis12:
