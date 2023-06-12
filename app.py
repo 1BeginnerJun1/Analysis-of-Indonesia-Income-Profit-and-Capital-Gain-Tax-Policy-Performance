@@ -193,7 +193,7 @@ indo_tax = pd.DataFrame(
 indo_tax['Year'] = indo_tax['Year'].astype(str)
 indo_tax_melt = pd.melt(indo_tax, id_vars=['Year'], value_vars=['predicted','actual']).rename(columns = {'variable':'Condition', 'value':'Tax revenue per GDP (%)'})
 
-correlation_data = tax_df.corr()
+correlation_data = tax_df.drop(tax_df.columns[0:6], axis=1).corr()
 correlation_data = correlation_data.stack().reset_index().rename(columns={0: 'correlation', 'level_0':'x_parameters', 'level_1':'y_parameters'})
 
 vis9, vis10 = st.columns([6,4])
