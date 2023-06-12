@@ -11,7 +11,7 @@ st.set_page_config(
     )
 
 # Data Preparation
-tax_revenue_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\Tax Revenue\Tax Revenue Data.csv") # dari OECD
+tax_revenue_df = pd.read_csv("Data/Tax Revenue Data.csv") # dari OECD
 cpi_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\CPI Data\CPI Data.csv") # dari transparency international 
 population_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\Population Data\Population Data.csv") # dari world bank
 gdp_per_capita_df = pd.read_csv("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Data\GDP per Capita\GDP per Capita.csv") # dari world bank
