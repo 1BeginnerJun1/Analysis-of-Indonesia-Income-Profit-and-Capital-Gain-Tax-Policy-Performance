@@ -75,7 +75,7 @@ st.markdown("<h2 style=''>" + "Project Introduction"  + "</h2>",
 
 pocol1, pocol2 = st.columns([3,7])
 with pocol1:
-    image_1 = Image.open("D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Image\Berita_1.jpg")
+    image_1 = Image.open("Image/Berita_1.jpg")
     st.image(image_1, caption='Sumber : Pajakku.com', use_column_width=True)
 with pocol2:
     potext_1 = " Menteri Keuangan Sri Mulyani Indrawati mengatakan rasio pajak Indonesia rendah. Penyebab rendahnya rasio pajak Indonesia dikarenakan tingkat kepatuhan masyarakat membayar pajak masih rendah. Tidak hanya itu, sebagian masyarakat yang masih menganggap membayar pajak merupakan bentuk penjajahan dan bukan suatu kewajiban."
@@ -181,7 +181,7 @@ tax_df = pd.read_csv("Data/Tax Analysis.csv")
 year_list = [x for x in range(2011,2021)]
 indo_pred = []
 for i in year_list:
-    exec("loaded_model_" + str(i) + " = joblib.load('D:\Latihan Coding\TETRIS CEO BATCH 3\CAPSTONE PROJECT\Linear Regression Model\linearmodel_" + str(i) + ".sav')")
+    exec("loaded_model_" + str(i) + " = joblib.load('Linear Regression Model/linearmodel_" + str(i) + ".sav')")
     exec("indo_" + str(i) + " = loaded_model_" + str(i) + ".predict(tax_df[(tax_df['Year'] == " + str(i) + ") & (tax_df['Country'] == 'Indonesia')].drop(tax_df.columns[0:6], axis=1))")
     exec("indo_pred.append(indo_" + str(i) + "[0])")
 indo_act = list(tax_df[tax_df['Country'] == 'Indonesia']['% Tax Revenue per GDP'])
