@@ -213,7 +213,7 @@ indo_pred = []
 for i in year_list:
     exec("loaded_model_" + str(i) + " = joblib.load('Linear Regression Model/linearmodel_" + str(i) + ".sav')")
     exec("indo_" + str(i) + " = loaded_model_" + str(i) + ".predict(tax_df[(tax_df['Year'] == " + str(i) + ") & (tax_df['Country'] == 'Indonesia')].drop(tax_df.columns[0:6], axis=1))")
-    exec("indo_pred.append(indo_" + str(i) + "[0])")
+    exec("indo_pred.append(round(indo_" + str(i) + "[0], 2))")
 indo_act = list(tax_df[tax_df['Country'] == 'Indonesia']['% Tax Revenue per GDP'])
 indo_tax = pd.DataFrame(
     {'Year': year_list,
@@ -225,6 +225,8 @@ indo_tax_melt = pd.melt(indo_tax, id_vars=['Year'], value_vars=['predicted','act
 
 correlation_data = tax_df.drop(tax_df.columns[0:5], axis=1).corr()
 correlation_data = correlation_data.stack().reset_index().rename(columns={0: 'correlation', 'level_0':'x_parameters', 'level_1':'y_parameters'})
+correlation_data = correlation_data[(correlation_data['x_parameters'] != 'Year') & (correlation_data['y_parameters'] != 'Year')] 
+correlation_data['correlation'] = [round(x,2) for x in correlation_data['correlation']]
 
 s1, vis9, smid1, vis10, s2 = st.columns([1,7,0.5,5.5,1])
 with vis9:
@@ -240,21 +242,32 @@ with vis11:
     unsafe_allow_html=True)
 with vis12:
     corr_chart = alt.Chart(correlation_data).mark_rect().encode(
-    x='x_parameters:N',
-    y='y_parameters:N',
+    x='x_parameters:O',
+    y='y_parameters:O',
     color='correlation:Q'
-    ).properties(
+    )
+    text_corr_chart = alt.Chart(correlation_data).mark_text(baseline='middle').encode(
+    x='x_parameters:O',
+    y='y_parameters:O',
+    text='correlation:Q',
+    color=alt.condition(
+        alt.datum.correlation > 0.5,
+        alt.value('white'),
+        alt.value('black')
+        )
+    )
+    final_corr_chart = (corr_chart + text_corr_chart).properties(
         width=400,
         height=400,
         title='Correlation Matrix'
     ).configure_mark(
-        text='white'
+        text='blue'
     ).configure_title(
         fontSize=14
     ).configure_axisX(
         labelAngle=315
     )
-    st.altair_chart(corr_chart, use_container_width=True)
+    st.altair_chart(final_corr_chart, use_container_width=True)
 
 s5, vis1, smid3, vis2, s6 = st.columns([1,7,0.5,5.5,1])
 with vis1:
@@ -265,14 +278,20 @@ with vis2:
 s7, vis3, smid4, vis4, s8 = st.columns([1,7,0.5,5.5,1])
 with vis3:
     tax_chart = alt.Chart(indo_tax_melt).mark_line().encode(
-        x='Year:O',
-        y='Tax revenue per GDP (%):Q',
-        color = 'Condition:O',
-        tooltip=['Year', 'Tax revenue per GDP (%)']
-        ).configure_axisX(
-        labelAngle=0
-        )
-    st.altair_chart(tax_chart, use_container_width=True)
+    x='Year:O',
+    y='Tax revenue per GDP (%):Q',
+    color='Condition:O',
+    tooltip=['Year', 'Tax revenue per GDP (%)']
+    )
+    text_tax_chart = alt.Chart(indo_tax_melt).mark_text(baseline='middle', dx=5).encode(
+    x='Year:O',
+    y='Tax revenue per GDP (%):Q',
+    text='Tax revenue per GDP (%):Q'
+    )
+    final_tax_chart = alt.layer(tax_chart, text_tax_chart).configure_axisX(
+    labelAngle=0
+    )
+    st.altair_chart(final_tax_chart, use_container_width=True)
 with vis4:
     vis2_text1 = "From the chart on the left, it can be seen that the performance of income and capital gain tax regulations in Indonesia over the 10-year period from 2011 to 2020 consistently falls short of expectations. This can be observed from the income and capital gain tax revenue chart, which always remains below the predicted values. This is especially noticeable in the last 4 years, from 2017 to 2020."
     vis2_text2 = " During these 4 years, the decline in tax regulation performance becomes more pronounced each year. To further understand the performance of income and capital gain tax regulations, a performance index will be calculated as an indicator. The performance index formula is calculated as follows: performance index (%) = (1 - (actual - predicted) / actual) * 100."
@@ -292,7 +311,7 @@ with vis7:
     st.markdown("<p style='text-align: justify; font-size: 16px;'>" + vis7_text1 + vis7_text2 + "</p>",
     unsafe_allow_html=True)
 with vis8:
-    performance_index = [(1 - (x - y)/x)*100 for x, y in zip(indo_pred, indo_act)]
+    performance_index = [round((1 - (x - y)/x)*100, 1) for x, y in zip(indo_pred, indo_act)]
     indo_performance = pd.DataFrame(
     {'Year': year_list,
      'Performance Index (%)': performance_index})
@@ -300,10 +319,16 @@ with vis8:
         x='Year:O',
         y='Performance Index (%):Q',
         tooltip=['Year', 'Performance Index (%)']
-        ).configure_axisX(
-        labelAngle=0
         )
-    st.altair_chart(performance_chart, use_container_width=True)
+    text_performance_chart = alt.Chart(indo_performance).mark_text(align='center', baseline='bottom').encode(
+        x='Year:O',
+        y='Performance Index (%):Q',
+        text='Performance Index (%):Q',
+        )
+    final_performance_chart = (performance_chart + text_performance_chart).configure_axisX(
+        labelAngle=0
+        ).configure_text(fontSize=12)
+    st.altair_chart(final_performance_chart, use_container_width=True)
 
 st.markdown(" ")
 g13, g14, g15 = st.columns([1,13,1])
