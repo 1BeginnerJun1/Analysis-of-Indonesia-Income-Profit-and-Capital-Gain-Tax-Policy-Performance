@@ -339,11 +339,11 @@ conc1, conc2, conc3 = st.columns([1,13,1])
 conc2.markdown("<h2 style='text-align: left;'>Conclusion and Suggestion</h2>", unsafe_allow_html=True)
 scon1, con1, con2, scon2 = st.columns([1,8,5,1])
 with con1:
-    con1_text1 = "Based on the data processing and analysis results, we have found that the low tax revenue in Indonesia, especially in income and capital gain tax, is not only caused by low compliance rates but also by several factors, including:"
-    con1_text2 = "<br>1. High levels of corruption indicated by the low CPI Score in Indonesia, which makes people hesitant to pay taxes.<br>2. Low GDP per Capita, which leads to reduced welfare among the population and indirectly affects their willingness to pay taxes."
-    st.markdown("<p style='text-align: justify; font-size: 16px;'>" + con1_text1 + con1_text2 + "</h3>",
+    st.markdown("<h4 style='text-align: left;'>Conclusion</h4>", unsafe_allow_html=True)
+    con1_text1 = "Based on the analysis conducted on this project, we can conclude that tax regulations in Indonesia still has a potential for improvement or reevaluation as the actual income and capital gain tax performance in Indonesia is still below expectations according to machine learning model"
+    st.markdown("<p style='text-align: justify; font-size: 16px;'>" + con1_text1 + "</h3>",
     unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: left;'>What can the government do?</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: left;'>What can the government do to improve the performance of income and capital gain tax aside from reevaluating the tax regulations?</h4>", unsafe_allow_html=True)
     con1_text3 = "1. Combat corruption through various measures, such as allocating a higher budget to anti-corruption institutions, reviewing criminal laws related to corruption, etc.<br>2. Focus the budget on Indonesia's economic growth through measures like improving the management of natural resources, maintaining infrastructure, etc.<br>3. Increase labor force participation by creating job opportunities for local workers and reducing the reliance on foreign labor."
     st.markdown("<p style='text-align: justify; font-size: 16px;'>" + con1_text3 + "</h3>",
     unsafe_allow_html=True)
