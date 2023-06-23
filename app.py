@@ -6,7 +6,7 @@ from keras.models import load_model
 from PIL import Image
 
 st.set_page_config(
-    page_title = 'Project 2',
+    page_title = 'Indonesia Tax Analysis',
     layout = 'wide'
     )
 
